@@ -1,5 +1,4 @@
 # Calculator
-require "pry"
 
 def calculate(n1, n2, op)
   n1 = n1.to_f
