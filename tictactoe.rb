@@ -1,3 +1,4 @@
+require "pry"
 # 1. Draw a grid with 9 places, with the X's and O's given
 #     Combination of drawing blank lines, lines with symbols and separation lines
 # 2. Ask for player's choice and draw (X)
@@ -7,7 +8,7 @@
 #         - blocks the player from making a row of X's
 #         - helps making a row of O's
 # 4. Loop until a row of 3 X's or 3 O's is made, or until all 9 positions are filled
-# To define: how to store the X's and O's? array
+# To define: how to store the X's and O's? array, by default it is " " is the position was not picked yet
 
 # Draw a grid that looks like this depending on X's and O's given
 #  puts "     |     |     "
@@ -54,11 +55,27 @@ plays = Array.new(9) {|i| " "}
 draw_grid(plays)
 p plays
 
-# Player's choice
+while plays.include?(" ")
+  # Player's choice
 
-puts "Choose a position (from 1 to 9) to place a piece:"
-player_choice = gets.chomp
-plays[player_choice.to_i - 1] = "X"
+  puts "Choose a position (from 1 to 9) to place a piece:"
+  begin
+    player_choice = gets.chomp
+  end until plays[player_choice.to_i - 1] == " "
+  plays[player_choice.to_i - 1] = "X"
+  draw_grid(plays)
 
-draw_grid(plays)
-p plays
+  break unless plays.include?(" ")
+
+  # Computer's choice
+  #
+  # Easy algorithm:
+  # Random pick a position, then check if it is empty, if not try again
+  # Or: choose a random position inside an array that is a selection of available positions
+  begin
+    computer_choice = rand(1..9)
+  end until plays[computer_choice - 1] == " "
+  plays[computer_choice - 1] = "O"
+  draw_grid(plays)
+
+end
