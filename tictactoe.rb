@@ -49,15 +49,45 @@ def draw_grid(plays)
   draw_line
 end
 
+# A row is made for one of these combinations of X's or O's
+# 0 1 2
+# 3 4 5
+# 6 7 8
+# 0 3 6
+# 1 4 7
+# 2 5 8
+# 0 4 8
+# 2 4 6
+ROWS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+
+# 1. Extract all the indices where we find the given mark
+# 2. Check if these indices form one of the patterns above
+def row_is_made?(plays, mark)
+  # Find all the indices that have a mark, the others will be nil
+  ind = plays.map.with_index do |v,i|
+    if v == mark
+      i
+    end
+  end
+  # Remove the nil values to keep only the indices with a mark
+  ind = ind.delete_if {|v| v == nil }
+  # Find the rows (if the indices match any of the patterns above)
+  r = ROWS.select {|v| v - ind == [] }
+  # A row is made if r contains something
+  return (r != [])
+end
+
+def grid_is_filled?(plays)
+  not plays.include?(" ")
+end
+
 # Stores the plays, intially " "
 plays = Array.new(9) {|i| " "}
 
 draw_grid(plays)
-p plays
 
-while plays.include?(" ")
+loop do
   # Player's choice
-
   puts "Choose a position (from 1 to 9) to place a piece:"
   begin
     player_choice = gets.chomp
@@ -65,17 +95,30 @@ while plays.include?(" ")
   plays[player_choice.to_i - 1] = "X"
   draw_grid(plays)
 
-  break unless plays.include?(" ")
+  if grid_is_filled?(plays)
+    puts "It's a tie."
+    break
+  end
 
-  # Computer's choice
-  #
-  # Easy algorithm:
-  # Random pick a position, then check if it is empty, if not try again
-  # Or: choose a random position inside an array that is a selection of available positions
+  if row_is_made?(plays,"X")
+    puts "Great job! You won."
+    break
+  end
+
+  # Computer's choice (easy algo, without IA)
   begin
     computer_choice = rand(1..9)
   end until plays[computer_choice - 1] == " "
   plays[computer_choice - 1] = "O"
   draw_grid(plays)
 
+  if grid_is_filled?(plays)
+    puts "It's a tie."
+    break
+  end
+
+  if row_is_made?(plays,"O")
+    puts "The computer won."
+    break
+  end
 end
