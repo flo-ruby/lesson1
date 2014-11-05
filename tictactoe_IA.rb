@@ -1,3 +1,5 @@
+# Unfinished
+
 require "pry"
 # 1. Draw a grid with 9 places, with the X's and O's given
 #     Combination of drawing blank lines, lines with symbols and separation lines
@@ -93,6 +95,14 @@ def almost_a_row(plays, mark)
   # Find the rows (if the indices match any of the patterns above)
   r = ROWS.map {|v| ind - v }
   almost_rows = r.delete_if {|v| v.size != 2}
+end
+
+def computer_next_move(plays)
+  # Block the player from making a row
+  r = almost_a_row(plays, "X")
+  for i in r do
+
+  end
 end
 
 def grid_is_filled?(plays)
