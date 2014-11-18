@@ -1,3 +1,4 @@
+require "pry"
 # After correction:
 # - rewrite with more methods for more clarity
 # - use a hash to store the positions in the grid
@@ -64,6 +65,25 @@ def empty_positions?(plays)
   plays.select {|k,v| v == " "}.keys
 end
 
+def two_in_a_row(hsh, mark)
+  if hsh.values.count(mark) == 2
+    hsh.select {|k,v| v == " "}.keys.first
+  else
+    false
+  end
+end
+
+def position_to_complete_row(plays, mark)
+  for row in ROWS
+    hsh = plays.select{|k,v| row.include?(k)}
+    if pos = two_in_a_row(hsh, mark)
+      return pos
+      break
+    end
+  end
+  return false
+end
+
 def player_picks(plays)
   puts "Choose a position (from 1 to 9) to place a piece:"
   begin
@@ -73,7 +93,14 @@ def player_picks(plays)
 end
 
 def computer_picks(plays)
-  choice = empty_positions?(plays).sample
+  if pos = position_to_complete_row(plays, "O")
+    choice = pos
+  elsif pos = position_to_complete_row(plays, "X")
+    choice = pos
+  else
+    choice = empty_positions?(plays).sample
+  end
+  return choice
 end
 
 def one_player_picks(plays, mark)
