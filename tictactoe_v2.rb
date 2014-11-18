@@ -1,4 +1,3 @@
-require "pry"
 # After correction:
 # - rewrite with more methods for more clarity
 # - use a hash to store the positions in the grid
@@ -52,7 +51,7 @@ end
 
 ROWS = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
 
-def winner?(plays, mark)
+def winner(plays, mark)
   for row in ROWS
     if plays[row[0]] == mark && plays[row[1]] == mark && plays[row[2]] == mark
       return mark
@@ -131,7 +130,7 @@ begin
       break
     end
 
-    winner_mark = winner?(plays, player_mark)
+    winner_mark = winner(plays, player_mark)
     if winner_mark == "X"
       puts "Great job! You won."
       game_ended = true
