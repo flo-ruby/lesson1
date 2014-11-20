@@ -53,9 +53,7 @@ ROWS = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
 
 def winner(plays, mark)
   for row in ROWS
-    if plays[row[0]] == mark && plays[row[1]] == mark && plays[row[2]] == mark
-      return mark
-    end
+    return mark if plays[row[0]] == mark && plays[row[1]] == mark && plays[row[2]] == mark
   end
   return false
 end
@@ -99,7 +97,6 @@ def computer_picks(plays)
   else
     choice = empty_positions?(plays).sample
   end
-  return choice
 end
 
 def one_player_picks(plays, mark)
@@ -118,7 +115,7 @@ plays = Hash.new
 draw_grid(plays)
 
 game_ended = false
-begin
+loop do
 
   for player_mark in ["X","O"]
     one_player_picks(plays,player_mark)
@@ -127,19 +124,19 @@ begin
     if empty_positions?(plays) == []
       puts "It's a tie."
       game_ended = true
-      break
+      exit
     end
 
     winner_mark = winner(plays, player_mark)
     if winner_mark == "X"
       puts "Great job! You won."
       game_ended = true
-      break
+      exit
     elsif winner_mark == "O"
       puts "The computer won."
       game_ended = true
-      break
+      exit
     end
   end
 
-end until game_ended == true
+end
